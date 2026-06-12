@@ -33,6 +33,7 @@ Reference sources:
 - Optional realtime voice: OpenAI Realtime API after the text agent is stable.
 - Optional Google layer: Google Calendar for booking sync and Google Sheets for lead exports.
 - Deployment: Vercel preferred for Next.js; Supabase hosted project for database/auth/storage.
+- CI/CD: GitHub Actions verifies every branch with tests, typecheck, lint, and build. Vercel deploys previews from feature branches and production from `main`; Google Cloud Run remains an optional workflow backed by Docker and Secret Manager.
 
 ## Current Implementation
 
@@ -53,6 +54,7 @@ Reference sources:
 - Booking start/completion events can be stored with server routes and webhook route.
 - OpenAI Ads pixel/CAPI hooks are present but only activate with official account-provided env vars.
 - Google operational lead sync is present but only activates with `GOOGLE_SHEETS_WEBHOOK_URL`.
+- Deployment environment contracts are represented in `.env.example`, `scripts/configure-vercel-env.sh`, `lib/config/deployment.ts`, and `.github/workflows/*`.
 - Production admin lead listing requires `SUPABASE_SERVICE_ROLE_KEY`.
 - Live OpenAI responses require `OPENAI_API_KEY`; otherwise Ava uses the local compliance-safe fallback.
 

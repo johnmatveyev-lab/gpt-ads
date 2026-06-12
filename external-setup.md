@@ -16,6 +16,8 @@ The app is implemented and verified with local fallbacks plus Supabase anon inta
 - Set `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
 - Keep this key server-side only.
 - Re-test `/admin` with `ADMIN_ACCESS_TOKEN`.
+- Set `OWNER_EMAILS` and `SALES_REP_EMAILS` as comma-separated lists when the platform dashboard should route users into owner or sales-rep views.
+- Set `PLATFORM_ENCRYPTION_KEY` to exactly 32 UTF-8 bytes before storing ad-network API credentials.
 
 ### Booking
 
@@ -37,6 +39,7 @@ The app is implemented and verified with local fallbacks plus Supabase anon inta
 - Configure Twilio SMS with `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM_NUMBER`.
 - Configure VAPI outbound-call queuing with `VAPI_WEBHOOK_URL` and optional `VAPI_WEBHOOK_TOKEN`.
 - POST landing-page audit payloads to `/api/leads/onboard`.
+- Sensitive or regulated categories are flagged for human review and should not trigger automated voice screening.
 
 ## Optional Measurement
 
@@ -81,3 +84,17 @@ For production:
 bash scripts/configure-vercel-env.sh production
 vercel deploy --prod
 ```
+
+## GitHub Actions Deployment
+
+Required GitHub repository secrets for Vercel CI/CD:
+
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
+Optional Google Cloud Run deployment uses workload identity and Secret Manager. Configure these only if Cloud Run becomes an active target:
+
+- GitHub secrets: `GCP_WORKLOAD_IDENTITY_PROVIDER`, `GCP_SERVICE_ACCOUNT`, `GCP_PROJECT_ID`
+- GitHub variables: `GAR_LOCATION`, `GAR_REPOSITORY`, `CLOUD_RUN_REGION`, `CLOUD_RUN_SERVICE`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Google Secret Manager secrets: `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, `BOOKING_WEBHOOK_SECRET`, `ADMIN_ACCESS_TOKEN`, `RESEND_API_KEY`

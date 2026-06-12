@@ -1,0 +1,12 @@
+.git
+.github
+.next
+.data
+.env
+.env*.local
+.playwright-cli
+coverage
+dist
+node_modules
+supabase/.temp
+*.tsbuildinfo
