@@ -29,6 +29,15 @@ The app is implemented and verified with local fallbacks plus Supabase anon inta
 - Set `RESEND_API_KEY`, `EMAIL_FROM`, and `LEAD_NOTIFY_EMAIL`.
 - Submit a test lead and verify visitor + internal notifications.
 
+### Omnichannel Lead Onboarding
+
+- Apply `supabase/migrations/0009_sales_rep_contact_fields.sql`.
+- Add active sales reps in `public.profiles` with `role = 'sales_rep'`, `is_active = true`, and `mobile_number` and/or `email`.
+- Set `NEXT_PUBLIC_APP_URL` so rep emails deep-link to the platform dashboard.
+- Configure Twilio SMS with `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM_NUMBER`.
+- Configure VAPI outbound-call queuing with `VAPI_WEBHOOK_URL` and optional `VAPI_WEBHOOK_TOKEN`.
+- POST landing-page audit payloads to `/api/leads/onboard`.
+
 ## Optional Measurement
 
 ### OpenAI Ads Pixel

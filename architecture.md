@@ -271,6 +271,8 @@ Planned variables:
 - `NEXT_PUBLIC_SITE_URL`
 - `BOOKING_URL`
 - `BOOKING_WEBHOOK_SECRET`
+- `NEXT_PUBLIC_STRIPE_TIER1_CHECKOUT_URL`, optional Stripe payment link for Tier 1 checkout.
+- `NEXT_PUBLIC_STRIPE_TIER2_CHECKOUT_URL`, optional Stripe payment link for Tier 2 checkout.
 - `RESEND_API_KEY` or selected email provider key.
 - `GOOGLE_CLIENT_ID`, optional.
 - `GOOGLE_CLIENT_SECRET`, optional.

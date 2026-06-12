@@ -1,4 +1,9 @@
 export type FitLevel = "high" | "medium" | "low" | "needs_human_review";
+export type UserRole = "owner" | "sales_rep" | "customer";
+export type LeadStatus = "new" | "contacted" | "audit_ready" | "closed_won" | "closed_lost";
+export type AdNetworkName = "openai" | "google" | "facebook" | "tiktok";
+export type IntegrationEnvironment = "sandbox" | "production";
+export type IntegrationStatus = "configured" | "needs_review" | "verified" | "inactive";
 
 export type LeadInput = {
   name: string;
@@ -37,12 +42,36 @@ export type LeadRecord = LeadInput &
     id: string;
     createdAt: string;
     updatedAt: string;
-    status: "new" | "qualified" | "review" | "booked" | "closed";
+    ownerId?: string;
+    status: LeadStatus;
     bookingStatus: "not_started" | "started" | "booked";
+    auditData?: Record<string, unknown>;
     agentSummary?: string;
     adminNotes?: string;
     lastContactedAt?: string;
   };
+
+export type ProfileRecord = {
+  id: string;
+  email: string;
+  fullName?: string;
+  role: UserRole;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiIntegrationRecord = {
+  id: string;
+  ownerProfileId: string;
+  networkName: AdNetworkName;
+  environment: IntegrationEnvironment;
+  accountId: string;
+  parameters: Record<string, unknown>;
+  status: IntegrationStatus;
+  isActive: boolean;
+  lastVerifiedAt?: string;
+  updatedAt: string;
+};
 
 export type BookingRecord = {
   id: string;

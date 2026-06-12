@@ -21,7 +21,7 @@ export async function listLocalLeads() {
 
 export async function updateLocalLead(
   leadId: string,
-  updates: Partial<Pick<LeadRecord, "status" | "bookingStatus" | "adminNotes" | "lastContactedAt">>,
+  updates: Partial<Pick<LeadRecord, "status" | "bookingStatus" | "adminNotes" | "lastContactedAt" | "ownerId">>,
 ) {
   const leads = await readJson<LeadRecord[]>(leadsPath, []);
   const updated = leads.map((lead) =>

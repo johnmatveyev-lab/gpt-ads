@@ -3,7 +3,7 @@ import { listLocalLeads, updateLocalLead } from "@/lib/local-store";
 import { isSupabaseConfigured, listSupabaseLeads, updateSupabaseLead } from "@/lib/supabase";
 import type { LeadRecord } from "@/lib/types";
 
-const statusValues = new Set(["new", "qualified", "review", "booked", "closed"]);
+const statusValues = new Set(["new", "contacted", "audit_ready", "closed_won", "closed_lost"]);
 const bookingStatusValues = new Set(["not_started", "started", "booked"]);
 
 export async function GET(request: Request) {

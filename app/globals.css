@@ -1078,3 +1078,509 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+.platformLoginPage,
+.platformShell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(16, 185, 129, 0.22), transparent 32%),
+    linear-gradient(135deg, #0b0f19 0%, #071018 55%, #07140f 100%);
+  color: #f8fbff;
+}
+
+.platformLoginPage {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.platformLoginCard,
+.platformPanel,
+.platformMetric,
+.platformSidebar {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(11, 17, 25, 0.86);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+}
+
+.platformLoginCard {
+  width: min(100%, 720px);
+  border-radius: 14px;
+  padding: clamp(28px, 6vw, 64px);
+}
+
+.platformLoginCard h1,
+.platformHeader h1,
+.platformPanel h1 {
+  margin: 10px 0 14px;
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: 0.98;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.platformLoginCard p,
+.platformHeader p,
+.platformPanel p,
+.platformIdentity span,
+.platformList small,
+.platformTable small {
+  color: #b7c1c9;
+}
+
+.platformEyebrow {
+  margin: 0;
+  color: #10b981;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.platformPrimaryButton,
+.platformPrimaryLink,
+.platformGhostButton {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.platformPrimaryButton,
+.platformPrimaryLink {
+  padding: 0 20px;
+  color: #03120d;
+  background: linear-gradient(135deg, #60f2b4, #10b981);
+}
+
+.platformGhostButton {
+  width: fit-content;
+  padding: 0 18px;
+  color: #f8fbff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.platformStatus,
+.platformError,
+.platformSuccess {
+  display: block;
+  margin-top: 14px;
+  font-weight: 750;
+}
+
+.platformError {
+  color: #ff9a9a;
+}
+
+.platformSuccess {
+  color: #60f2b4;
+}
+
+.platformShell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.platformSidebar {
+  min-height: 100vh;
+  padding: 26px;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.platformBrand {
+  display: grid;
+  gap: 4px;
+  font-weight: 900;
+  font-size: 24px;
+}
+
+.platformBrand span {
+  color: #10b981;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.platformSidebar nav {
+  display: grid;
+  gap: 10px;
+}
+
+.platformSidebar nav a {
+  padding: 13px 14px;
+  border-radius: 8px;
+  color: #d9e5df;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.platformIdentity {
+  margin-top: auto;
+  display: grid;
+  gap: 4px;
+}
+
+.platformMain {
+  width: min(100%, 1280px);
+  padding: clamp(20px, 4vw, 48px);
+}
+
+.platformStack {
+  display: grid;
+  gap: 22px;
+}
+
+.platformHeader,
+.platformPanelHeader,
+.platformListRow,
+.platformTableHead,
+.platformTableRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.platformHeader {
+  margin-bottom: 24px;
+}
+
+.platformMetricGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.platformMetric {
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.platformMetric span {
+  display: block;
+  color: #b7c1c9;
+  font-size: 13px;
+}
+
+.platformMetric strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 32px;
+}
+
+.platformPanel {
+  border-radius: 12px;
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.platformNarrow {
+  max-width: 720px;
+}
+
+.platformTwoColumn {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.7fr);
+  gap: 20px;
+}
+
+.platformList,
+.platformForm {
+  display: grid;
+  gap: 12px;
+}
+
+.platformListRow {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.platformListRow span:first-child,
+.platformTableRow span:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.platformTable {
+  display: grid;
+  overflow-x: auto;
+}
+
+.platformTableHead,
+.platformTableRow {
+  min-width: 860px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.4fr 0.6fr 1.2fr;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.platformTableHead {
+  color: #10b981;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.platformForm label {
+  display: grid;
+  gap: 8px;
+  color: #dce7e2;
+  font-weight: 800;
+}
+
+.platformForm input,
+.platformForm select,
+.platformForm textarea,
+.platformTable select {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fbff;
+  padding: 13px 14px;
+}
+
+.platformForm textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.platformCheckbox {
+  display: flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.platformCheckbox input {
+  width: auto;
+}
+
+.platformStatusHero {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border: 1px solid rgba(96, 242, 180, 0.28);
+  border-radius: 12px;
+  padding: clamp(22px, 4vw, 42px);
+  background:
+    linear-gradient(135deg, rgba(96, 242, 180, 0.16), transparent 48%),
+    rgba(11, 17, 25, 0.88);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+}
+
+.platformStatusHero span,
+.platformPaymentCard span,
+.platformIntegrationCard span,
+.platformPipelineHeader span {
+  color: #60f2b4;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.platformStatusHero strong {
+  display: block;
+  margin: 10px 0 12px;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.platformStatusHero svg {
+  width: 92px;
+  height: 92px;
+  color: #60f2b4;
+  flex: 0 0 auto;
+}
+
+.platformProgressList,
+.platformPaymentGrid,
+.platformLeadFacts,
+.platformCheckList {
+  display: grid;
+  gap: 14px;
+}
+
+.platformProgressItem {
+  display: grid;
+  gap: 8px;
+}
+
+.platformProgressItem span,
+.platformActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.platformProgressItem i {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.platformProgressItem b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #60f2b4, #10b981);
+}
+
+.platformPaymentGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.platformPaymentCard,
+.platformIntegrationCard,
+.platformLeadCard,
+.platformPipelineColumn {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.platformPaymentCard,
+.platformIntegrationCard {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.platformPaymentCard strong,
+.platformIntegrationCard strong {
+  font-size: 26px;
+}
+
+.platformMetricWithIcon svg,
+.platformPanelHeader svg {
+  color: #60f2b4;
+  flex: 0 0 auto;
+}
+
+.platformSalesGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.45fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.platformPipeline {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.platformPipelineColumn {
+  min-height: 520px;
+  padding: 12px;
+}
+
+.platformPipelineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.platformLeadCard {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+  color: #f8fbff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.platformLeadCard.active {
+  border-color: rgba(96, 242, 180, 0.7);
+  background: rgba(96, 242, 180, 0.12);
+}
+
+.platformLeadCard span,
+.platformLeadCard small,
+.platformIntegrationCard small {
+  color: #b7c1c9;
+}
+
+.platformPlaybookPane {
+  display: grid;
+  gap: 14px;
+}
+
+.platformLeadFacts span {
+  display: grid;
+  gap: 5px;
+  color: #b7c1c9;
+}
+
+.platformLeadFacts strong {
+  color: #f8fbff;
+}
+
+.platformCheckList {
+  margin: 0;
+  padding-left: 20px;
+  color: #d9e5df;
+  line-height: 1.55;
+}
+
+.platformIntegrationGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 920px) {
+  .platformShell {
+    grid-template-columns: 1fr;
+  }
+
+  .platformSidebar {
+    min-height: auto;
+    position: static;
+  }
+
+  .platformSidebar nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .platformMetricGrid,
+  .platformTwoColumn,
+  .platformSalesGrid,
+  .platformIntegrationGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .platformHeader,
+  .platformPanelHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .platformStatusHero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .platformPaymentGrid {
+    grid-template-columns: 1fr;
+  }
+}

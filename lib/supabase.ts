@@ -46,7 +46,7 @@ export async function listSupabaseLeads() {
 
 export async function updateSupabaseLead(
   leadId: string,
-  updates: Partial<Pick<LeadRecord, "status" | "bookingStatus" | "adminNotes" | "lastContactedAt">>,
+  updates: Partial<Pick<LeadRecord, "status" | "bookingStatus" | "adminNotes" | "lastContactedAt" | "ownerId">>,
 ) {
   if (!serviceRoleKey) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY is required for admin lead updates.");
@@ -55,7 +55,7 @@ export async function updateSupabaseLead(
   const supabase = getServerClient();
   if (!supabase) return null;
 
-  const rowUpdates: Record<string, string> = {
+  const rowUpdates: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
 
@@ -63,6 +63,7 @@ export async function updateSupabaseLead(
   if (updates.bookingStatus) rowUpdates.booking_status = updates.bookingStatus;
   if (updates.adminNotes !== undefined) rowUpdates.admin_notes = updates.adminNotes;
   if (updates.lastContactedAt !== undefined) rowUpdates.last_contacted_at = updates.lastContactedAt;
+  if (updates.ownerId !== undefined) rowUpdates.owner_id = updates.ownerId;
 
   const { data, error } = await supabase.from("leads").update(rowUpdates).eq("id", leadId).select("*").single();
   if (error) throw error;
@@ -118,10 +119,16 @@ function toLeadRow(lead: LeadRecord) {
     name: lead.name,
     email: lead.email,
     phone: lead.phone || null,
+    owner_id: lead.ownerId || null,
+    contact_name: lead.name,
+    contact_email: lead.email,
+    contact_phone: lead.phone || "",
+    niche_industry: lead.businessType,
+    target_geography: lead.location,
     business_name: lead.businessName,
     business_type: lead.businessType,
     location: lead.location,
-    website_url: lead.websiteUrl || null,
+    website_url: lead.websiteUrl || "",
     primary_offer: lead.primaryOffer,
     target_customers: lead.targetCustomers,
     current_channels: lead.currentChannels,
@@ -144,6 +151,7 @@ function toLeadRow(lead: LeadRecord) {
     booking_recommended: lead.bookingRecommended,
     policy_review_required: lead.policyReviewRequired,
     agent_summary: lead.agentSummary || null,
+    audit_data: lead.auditData || {},
   };
 }
 
@@ -155,9 +163,10 @@ function fromLeadRow(row: Record<string, unknown>): LeadRecord {
     name: String(row.name),
     email: String(row.email),
     phone: row.phone ? String(row.phone) : undefined,
+    ownerId: row.owner_id ? String(row.owner_id) : undefined,
     businessName: String(row.business_name),
-    businessType: String(row.business_type),
-    location: String(row.location),
+    businessType: String(row.business_type ?? row.niche_industry ?? ""),
+    location: String(row.location ?? row.target_geography ?? ""),
     websiteUrl: row.website_url ? String(row.website_url) : undefined,
     primaryOffer: String(row.primary_offer),
     targetCustomers: String(row.target_customers),
@@ -173,7 +182,7 @@ function fromLeadRow(row: Record<string, unknown>): LeadRecord {
     utmTerm: row.utm_term ? String(row.utm_term) : undefined,
     readinessScore: Number(row.readiness_score ?? 0),
     fitLevel: String(row.fit_level) as LeadRecord["fitLevel"],
-    status: String(row.status ?? "new") as LeadRecord["status"],
+    status: normalizeLeadStatus(row.status),
     bookingStatus: String(row.booking_status ?? "not_started") as LeadRecord["bookingStatus"],
     opportunities: Array.isArray(row.opportunities) ? (row.opportunities as string[]) : [],
     risks: Array.isArray(row.risks) ? (row.risks as string[]) : [],
@@ -183,5 +192,23 @@ function fromLeadRow(row: Record<string, unknown>): LeadRecord {
     agentSummary: row.agent_summary ? String(row.agent_summary) : undefined,
     adminNotes: row.admin_notes ? String(row.admin_notes) : undefined,
     lastContactedAt: row.last_contacted_at ? String(row.last_contacted_at) : undefined,
+    auditData:
+      row.audit_data && typeof row.audit_data === "object" ? (row.audit_data as Record<string, unknown>) : undefined,
   };
+}
+
+function normalizeLeadStatus(status: unknown): LeadRecord["status"] {
+  if (status === "qualified" || status === "review" || status === "booked") return "audit_ready";
+  if (status === "closed") return "closed_won";
+  if (
+    status === "new" ||
+    status === "contacted" ||
+    status === "audit_ready" ||
+    status === "closed_won" ||
+    status === "closed_lost"
+  ) {
+    return status;
+  }
+
+  return "new";
 }

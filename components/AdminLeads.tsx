@@ -81,10 +81,10 @@ export default function AdminLeads() {
                 disabled={saving}
               >
                 <option value="new">new</option>
-                <option value="qualified">qualified</option>
-                <option value="review">review</option>
-                <option value="booked">booked</option>
-                <option value="closed">closed</option>
+                <option value="contacted">contacted</option>
+                <option value="audit_ready">audit_ready</option>
+                <option value="closed_won">closed_won</option>
+                <option value="closed_lost">closed_lost</option>
               </select>
             </label>
             <label>

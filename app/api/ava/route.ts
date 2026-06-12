@@ -52,11 +52,7 @@ export async function POST(request: Request) {
       updatedAt: now,
       ...readinessResult,
       status:
-        readinessResult.fitLevel === "needs_human_review"
-          ? "review"
-          : readinessResult.bookingRecommended
-            ? "qualified"
-            : "new",
+        readinessResult.fitLevel === "needs_human_review" || readinessResult.bookingRecommended ? "audit_ready" : "new",
       bookingStatus: "not_started",
       agentSummary: summarizeMessages(messages),
     };
