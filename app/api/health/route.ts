@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isGoogleOperationalSyncConfigured } from "@/lib/google-sync";
 import { isOpenAiAdsCapiConfigured, isOpenAiAdsPixelConfigured } from "@/lib/openai-ads-measurement";
+import { isStripeConfigured, isStripeWebhookConfigured } from "@/lib/payments/stripe";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
 export async function GET() {
@@ -10,6 +11,10 @@ export async function GET() {
     supabaseConfigured: isSupabaseConfigured(),
     supabaseAdminConfigured: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
     openAiConfigured: Boolean(process.env.OPENAI_API_KEY),
+    stripeConfigured: isStripeConfigured(),
+    stripeWebhookConfigured: isStripeWebhookConfigured(),
+    stripeTier1PriceConfigured: Boolean(process.env.STRIPE_TIER1_PRICE_ID),
+    stripeTier2PriceConfigured: Boolean(process.env.STRIPE_TIER2_PRICE_ID),
     bookingConfigured: Boolean(process.env.BOOKING_URL),
     bookingWebhookSecretConfigured: Boolean(process.env.BOOKING_WEBHOOK_SECRET),
     emailConfigured: Boolean(process.env.RESEND_API_KEY),

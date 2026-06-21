@@ -6,6 +6,7 @@ export type ConversionEventName =
   | "qualified_lead"
   | "booking_started"
   | "booking_completed"
+  | "payment_completed"
   | "client_onboarded";
 
 export type ConversionPayload = {

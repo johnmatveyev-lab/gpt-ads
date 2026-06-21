@@ -1,17 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { CreditCard, Gauge, SearchCheck } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { summarizeClientStatus } from "@/lib/platform/dashboard";
-import type { LeadRecord } from "@/lib/types";
+import type { LeadRecord, PaymentTier } from "@/lib/types";
 
 type LeadsResponse = {
   leads: LeadRecord[];
 };
-
-const tierOneUrl = process.env.NEXT_PUBLIC_STRIPE_TIER1_CHECKOUT_URL;
-const tierTwoUrl = process.env.NEXT_PUBLIC_STRIPE_TIER2_CHECKOUT_URL;
 
 export default function ClientPortalDashboard() {
   const { data, isLoading, error } = useQuery({
@@ -27,6 +25,31 @@ export default function ClientPortalDashboard() {
   const leads = data?.leads ?? [];
   const lead = leads[0];
   const status = summarizeClientStatus(lead);
+
+  const [checkoutTier, setCheckoutTier] = useState<PaymentTier | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
+  async function startCheckout(tier: PaymentTier) {
+    setCheckoutTier(tier);
+    setCheckoutError(null);
+    try {
+      const response = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier, leadId: lead?.id }),
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error || "Unable to start checkout.");
+      }
+      window.location.href = payload.url as string;
+    } catch (checkoutException) {
+      setCheckoutError(
+        checkoutException instanceof Error ? checkoutException.message : "Unable to start checkout.",
+      );
+      setCheckoutTier(null);
+    }
+  }
 
   return (
     <div className="platformStack">
@@ -84,13 +107,26 @@ export default function ClientPortalDashboard() {
           <div className="platformPanelHeader">
             <div>
               <h2>Payment modules</h2>
-              <p>Use the configured checkout links when your team is ready to move forward.</p>
+              <p>Move forward through secure Stripe checkout when your team is ready.</p>
             </div>
             <CreditCard aria-hidden="true" />
           </div>
+          {checkoutError ? <p className="platformError">{checkoutError}</p> : null}
           <div className="platformPaymentGrid">
-            <PaymentLink label="Tier 1" price="$1,499" href={tierOneUrl} />
-            <PaymentLink label="Tier 2" price="$2,450/mo" href={tierTwoUrl} />
+            <PaymentButton
+              label="Launch Setup"
+              price="$1,499"
+              onClick={() => startCheckout("tier_1")}
+              loading={checkoutTier === "tier_1"}
+              disabled={checkoutTier !== null}
+            />
+            <PaymentButton
+              label="Managed Growth"
+              price="$2,450/mo"
+              onClick={() => startCheckout("tier_2")}
+              loading={checkoutTier === "tier_2"}
+              disabled={checkoutTier !== null}
+            />
           </div>
         </div>
       </section>
@@ -130,18 +166,31 @@ function Progress({ label, value }: { label: string; value: number }) {
   );
 }
 
-function PaymentLink({ label, price, href }: { label: string; price: string; href?: string }) {
+function PaymentButton({
+  label,
+  price,
+  onClick,
+  loading,
+  disabled,
+}: {
+  label: string;
+  price: string;
+  onClick: () => void;
+  loading: boolean;
+  disabled: boolean;
+}) {
   return (
     <div className="platformPaymentCard">
       <span>{label}</span>
       <strong>{price}</strong>
-      {href ? (
-        <a className="platformPrimaryLink" href={href}>
-          Checkout
-        </a>
-      ) : (
-        <p>Checkout link not configured.</p>
-      )}
+      <button
+        type="button"
+        className="platformPrimaryLink"
+        onClick={onClick}
+        disabled={disabled}
+      >
+        {loading ? "Redirecting…" : "Checkout"}
+      </button>
     </div>
   );
 }

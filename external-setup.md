@@ -41,6 +41,22 @@ The app is implemented and verified with local fallbacks plus Supabase anon inta
 - POST landing-page audit payloads to `/api/leads/onboard`.
 - Sensitive or regulated categories are flagged for human review and should not trigger automated voice screening.
 
+### Stripe Payments
+
+Full server-side Stripe Checkout is implemented (`/api/stripe/checkout` and the signature-verified `/api/stripe/webhook`). To activate it:
+
+- Create two Stripe Prices in the dashboard:
+  - A one-time price for Tier 1 (Launch Setup) → set `STRIPE_TIER1_PRICE_ID`.
+  - A recurring price for Tier 2 (Managed Growth) → set `STRIPE_TIER2_PRICE_ID`.
+- Set `STRIPE_SECRET_KEY` (use a test key first, then the live key).
+- Create a webhook endpoint in Stripe pointing at `https://<your-domain>/api/stripe/webhook`, subscribe to `checkout.session.completed`, `checkout.session.expired`, `invoice.payment_failed`, and `customer.subscription.deleted`, then set the signing secret as `STRIPE_WEBHOOK_SECRET`.
+- Ensure `SUPABASE_SERVICE_ROLE_KEY` is set so payments persist to the `payments` table; without it, payments fall back to a local JSON file (dev only).
+- Apply `supabase/migrations/0010_payments.sql`.
+- Verify `/api/health` shows `stripeConfigured`, `stripeWebhookConfigured`, `stripeTier1PriceConfigured`, and `stripeTier2PriceConfigured` all `true`.
+- Local webhook testing: `stripe listen --forward-to localhost:3000/api/stripe/webhook` then `stripe trigger checkout.session.completed`.
+
+The legacy `NEXT_PUBLIC_STRIPE_TIER*_CHECKOUT_URL` Payment Links are no longer used by the client portal, which now drives checkout through the API.
+
 ## Optional Measurement
 
 ### OpenAI Ads Pixel
