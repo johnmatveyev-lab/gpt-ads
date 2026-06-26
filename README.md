@@ -22,7 +22,7 @@ Production should set:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `OPENAI_API_KEY`
+- `GEMINI_API_KEY`
 - `BOOKING_URL`
 - `ADMIN_ACCESS_TOKEN`
 
@@ -69,7 +69,7 @@ Current Vercel URLs:
 - Preview: https://gpt-ads-website-nciwk1b1w-johnmatveyev-lab.vercel.app
 - Production alias: https://gpt-ads-website.vercel.app
 
-The preview was deployed with Supabase URL and anon key runtime variables. Add `SUPABASE_SERVICE_ROLE_KEY` for production admin listing and `OPENAI_API_KEY` for live Ava responses.
+The preview was deployed with Supabase URL and anon key runtime variables. Add `SUPABASE_SERVICE_ROLE_KEY` for production admin listing and `GEMINI_API_KEY` for live Ava responses.
 
 See `launch-checklist.md` for the latest verification evidence.
 See `external-setup.md` for the remaining account-owned configuration steps.

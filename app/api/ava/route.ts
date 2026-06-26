@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 import { trackServerEvent } from "@/lib/analytics";
 import { saveLocalAgentSession, saveLocalLead } from "@/lib/local-store";
 import { notifyLead } from "@/lib/notifications";
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
   }
 
   const { messages, leadContext, captureLead = false, sessionId = randomUUID() } = parsed.data;
-  const message = process.env.OPENAI_API_KEY
-    ? await getOpenAIResponse(messages)
+  const message = process.env.GEMINI_API_KEY
+    ? await getGeminiResponse(messages)
     : getFallbackResponse(messages[messages.length - 1]?.content || "");
 
   const fullLeadContext = leadInputSchema.safeParse(leadContext);
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       createdAt: session.createdAt,
       payload: {
         sessionId,
-        mode: process.env.OPENAI_API_KEY ? "openai" : "local-fallback",
+        mode: process.env.GEMINI_API_KEY ? "gemini" : "local-fallback",
       },
     });
 
@@ -99,22 +99,22 @@ export async function POST(request: Request) {
     bookingRecommended: readinessResult.bookingRecommended,
     sessionId,
     capturedLead,
-    mode: process.env.OPENAI_API_KEY ? "openai" : "local-fallback",
+    mode: process.env.GEMINI_API_KEY ? "gemini" : "local-fallback",
   });
 }
 
-async function getOpenAIResponse(messages: { role: "user" | "assistant"; content: string }[]) {
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const response = await client.responses.create({
-    model: "gpt-5-mini",
-    instructions: systemPrompt,
-    input: messages.map((message) => ({
-      role: message.role,
-      content: [{ type: "input_text", text: message.content }],
+async function getGeminiResponse(messages: { role: "user" | "assistant"; content: string }[]) {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const response = await ai.models.generateContent({
+    model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    config: { systemInstruction: systemPrompt },
+    contents: messages.map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
     })),
   });
 
-  return response.output_text;
+  return response.text ?? "";
 }
 
 function getFallbackResponse(input: string) {
