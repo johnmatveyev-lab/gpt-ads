@@ -4,11 +4,12 @@ The app is implemented and verified with local fallbacks plus Supabase anon inta
 
 ## Required For Full Production
 
-### OpenAI
+### Gemini (Ava AI)
 
-- Create an OpenAI API key in the OpenAI Platform.
-- Set `OPENAI_API_KEY` in Vercel.
-- Re-test Ava with `/api/health` showing `openAiConfigured: true`.
+- Create a Gemini API key in Google AI Studio (https://aistudio.google.com/apikey).
+- Set `GEMINI_API_KEY` in Vercel. Optionally set `GEMINI_MODEL` (defaults to `gemini-2.0-flash`).
+- Re-test Ava with `/api/health` showing `geminiConfigured: true`.
+- Without `GEMINI_API_KEY`, Ava uses the deterministic compliance-safe fallback.
 
 ### Supabase Admin
 

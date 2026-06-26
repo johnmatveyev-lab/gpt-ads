@@ -10,7 +10,7 @@ export async function GET() {
     app: "gpt-ads-website",
     supabaseConfigured: isSupabaseConfigured(),
     supabaseAdminConfigured: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
-    openAiConfigured: Boolean(process.env.OPENAI_API_KEY),
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
     stripeConfigured: isStripeConfigured(),
     stripeWebhookConfigured: isStripeWebhookConfigured(),
     stripeTier1PriceConfigured: Boolean(process.env.STRIPE_TIER1_PRICE_ID),
