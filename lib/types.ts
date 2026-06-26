@@ -83,6 +83,33 @@ export type BookingRecord = {
   status: "started" | "booked" | "cancelled" | "completed";
 };
 
+export type PaymentTier = "tier_1" | "tier_2";
+
+export type PaymentStatus =
+  | "pending"
+  | "paid"
+  | "active"
+  | "failed"
+  | "refunded"
+  | "canceled";
+
+export type PaymentRecord = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  leadId?: string;
+  customerEmail?: string;
+  tier: PaymentTier;
+  mode: "payment" | "subscription";
+  status: PaymentStatus;
+  amountTotal?: number;
+  currency?: string;
+  stripeCheckoutSessionId?: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  stripePaymentIntentId?: string;
+};
+
 export type AgentMessage = {
   role: "user" | "assistant";
   content: string;

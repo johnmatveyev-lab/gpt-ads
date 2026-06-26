@@ -76,6 +76,18 @@
 - [x] Add booking completed webhook if provider supports it.
 - [ ] Optional: sync to Google Calendar.
 
+## Phase 12: Payments (Stripe)
+
+- [x] Add Stripe Node SDK.
+- [x] Build server-side Checkout Session route (`/api/stripe/checkout`).
+- [x] Build signature-verified webhook (`/api/stripe/webhook`).
+- [x] Persist payments to Supabase with local fallback (`payments` table, migration `0010`).
+- [x] Wire client portal tier buttons to live checkout.
+- [x] Surface Stripe config in `/api/health`.
+- [x] Add unit tests for tier configuration.
+- [ ] Add `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_TIER1_PRICE_ID`, `STRIPE_TIER2_PRICE_ID` in production.
+- [ ] Create the Stripe webhook endpoint and apply migration `0010_payments.sql`.
+
 ## Phase 8: Admin
 
 - [x] Build protected admin login.
