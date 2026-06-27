@@ -35,9 +35,22 @@ export async function POST(request: Request) {
   }
 
   const { messages, leadContext, captureLead = false, sessionId = randomUUID() } = parsed.data;
-  const message = process.env.GEMINI_API_KEY
-    ? await getGeminiResponse(messages)
-    : getFallbackResponse(messages[messages.length - 1]?.content || "");
+  const lastUserMessage = messages[messages.length - 1]?.content || "";
+  let usedFallback = !process.env.GEMINI_API_KEY;
+  let message: string;
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      message = await getGeminiResponse(messages);
+      if (!message.trim()) throw new Error("Empty Gemini response.");
+    } catch {
+      // Gemini quota/rate-limit/outage must not break the funnel: fall back to
+      // the deterministic compliance-safe response.
+      usedFallback = true;
+      message = getFallbackResponse(lastUserMessage);
+    }
+  } else {
+    message = getFallbackResponse(lastUserMessage);
+  }
 
   const fullLeadContext = leadInputSchema.safeParse(leadContext);
   const readinessResult = scoreLead(fullLeadContext.success ? fullLeadContext.data : toScorableLead(leadContext));
@@ -84,7 +97,7 @@ export async function POST(request: Request) {
       createdAt: session.createdAt,
       payload: {
         sessionId,
-        mode: process.env.GEMINI_API_KEY ? "gemini" : "local-fallback",
+        mode: usedFallback ? "local-fallback" : "gemini",
       },
     });
 
@@ -99,14 +112,14 @@ export async function POST(request: Request) {
     bookingRecommended: readinessResult.bookingRecommended,
     sessionId,
     capturedLead,
-    mode: process.env.GEMINI_API_KEY ? "gemini" : "local-fallback",
+    mode: usedFallback ? "local-fallback" : "gemini",
   });
 }
 
 async function getGeminiResponse(messages: { role: "user" | "assistant"; content: string }[]) {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const response = await ai.models.generateContent({
-    model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
     config: { systemInstruction: systemPrompt },
     contents: messages.map((message) => ({
       role: message.role === "assistant" ? "model" : "user",

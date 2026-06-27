@@ -27,7 +27,7 @@ Dashboard → project `vpsmybojbxugeklsrkik` → Settings → API → copy `serv
 
 Get a key from an **active, non-suspended** Google project at
 https://aistudio.google.com/apikey → set `GEMINI_API_KEY`.
-Optional: `GEMINI_MODEL` (defaults to `gemini-2.0-flash`).
+Optional: `GEMINI_MODEL` (defaults to `gemini-2.5-flash`).
 
 > Note: the first key tried returned `CONSUMER_SUSPENDED` — its Google project is
 > suspended. Use a key from a project with billing in good standing.
