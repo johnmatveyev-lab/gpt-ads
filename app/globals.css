@@ -833,6 +833,42 @@ h1 {
   font-weight: 900;
 }
 
+.chatHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.voiceToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px !important;
+  color: var(--teal);
+  font-size: 16px !important;
+}
+
+.voiceToggleActive {
+  background: var(--teal);
+  color: var(--white);
+}
+
+.voicePanel {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--line-dark);
+  font-size: 13px;
+  color: #087d55;
+  font-weight: 700;
+}
+
+.voicePanel p {
+  margin-top: 4px;
+  font-weight: 400;
+  color: #071018;
+}
+
 .adminPage {
   min-height: 100vh;
   padding: 48px clamp(18px, 5vw, 76px);
