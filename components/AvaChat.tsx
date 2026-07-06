@@ -1,9 +1,10 @@
 "use client";
 
-import { Mic, MicOff, MessageCircle, Send, X } from "lucide-react";
+import { Mic, MicOff, MessageCircle, Phone, Send, X } from "lucide-react";
 import { useState } from "react";
 import type { AgentMessage } from "@/lib/types";
 import { useAvaVoice } from "@/components/useAvaVoice";
+import { formatPhoneDisplay } from "@/lib/phone";
 
 const starter: AgentMessage = {
   role: "assistant",
@@ -11,7 +12,7 @@ const starter: AgentMessage = {
     "Hi, I’m Ava. Tell me what kind of local business you run and where you serve customers. I’ll help you think through ChatGPT Ads readiness without making fake partner or guaranteed-results claims.",
 };
 
-export default function AvaChat({ bookingUrl }: { bookingUrl: string }) {
+export default function AvaChat({ bookingUrl, phoneNumber }: { bookingUrl: string; phoneNumber?: string }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<AgentMessage[]>([starter]);
   const [input, setInput] = useState("");
@@ -110,6 +111,11 @@ export default function AvaChat({ bookingUrl }: { bookingUrl: string }) {
             <a className="bookingLink" href={bookingUrl} target="_blank" rel="noreferrer">
               Prefer a human call? Book a time that works for you.
             </a>
+            {phoneNumber ? (
+              <a className="bookingLink" href={`tel:${phoneNumber}`}>
+                <Phone size={14} /> Or call Ava now: {formatPhoneDisplay(phoneNumber)}
+              </a>
+            ) : null}
           </div>
           <form className="chatComposer" onSubmit={sendMessage}>
             <input

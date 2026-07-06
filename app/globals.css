@@ -87,6 +87,16 @@ main {
   align-items: center;
 }
 
+.navPhone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--teal);
+  white-space: nowrap;
+}
+
+
 .brand {
   gap: 10px;
   font-weight: 850;
@@ -829,6 +839,9 @@ h1 {
 }
 
 .bookingLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: #087d55;
   font-weight: 900;
 }
