@@ -3,6 +3,7 @@ import { isGoogleOperationalSyncConfigured } from "@/lib/google-sync";
 import { isOpenAiAdsCapiConfigured, isOpenAiAdsPixelConfigured } from "@/lib/openai-ads-measurement";
 import { isStripeConfigured, isStripeWebhookConfigured } from "@/lib/payments/stripe";
 import { isSupabaseConfigured } from "@/lib/supabase";
+import { isXaiVoiceConfigured } from "@/lib/voice/xai";
 
 export async function GET() {
   return NextResponse.json({
@@ -11,6 +12,7 @@ export async function GET() {
     supabaseConfigured: isSupabaseConfigured(),
     supabaseAdminConfigured: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
     geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+    xaiVoiceConfigured: isXaiVoiceConfigured(),
     stripeConfigured: isStripeConfigured(),
     stripeWebhookConfigured: isStripeWebhookConfigured(),
     stripeTier1PriceConfigured: Boolean(process.env.STRIPE_TIER1_PRICE_ID),

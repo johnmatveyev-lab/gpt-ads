@@ -5,6 +5,7 @@ import {
   CircleDollarSign,
   MapPin,
   MessageCircle,
+  Phone,
   ShieldCheck,
   Sparkles,
   Target,
@@ -13,8 +14,11 @@ import {
 } from "lucide-react";
 import AvaChat from "@/components/AvaChat";
 import LeadAuditForm from "@/components/LeadAuditForm";
+import { formatPhoneDisplay } from "@/lib/phone";
 
 const bookingUrl = process.env.BOOKING_URL || "https://cal.com";
+const avaPhoneNumber = process.env.NEXT_PUBLIC_AVA_PHONE_NUMBER || "+12296006648";
+const avaPhoneDisplay = formatPhoneDisplay(avaPhoneNumber);
 
 const processSteps = [
   {
@@ -89,6 +93,10 @@ export default function Home() {
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
           </div>
+          <a className="navPhone" href={`tel:${avaPhoneNumber}`}>
+            <Phone size={16} />
+            {avaPhoneDisplay}
+          </a>
           <a className="navButton" href={bookingUrl} target="_blank" rel="noreferrer">
             Book a Call
           </a>
@@ -112,6 +120,10 @@ export default function Home() {
               </a>
               <a className="secondaryButton" href="#ava">
                 Talk with Ava
+              </a>
+              <a className="secondaryButton" href={`tel:${avaPhoneNumber}`}>
+                <Phone size={18} />
+                Call Ava: {avaPhoneDisplay}
               </a>
             </div>
             <div className="benefitRow" aria-label="Key benefits">
@@ -266,7 +278,7 @@ export default function Home() {
         <a href="/admin">Admin</a>
       </footer>
 
-      <AvaChat bookingUrl={bookingUrl} />
+      <AvaChat bookingUrl={bookingUrl} phoneNumber={avaPhoneNumber} />
     </main>
   );
 }

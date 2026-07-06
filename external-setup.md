@@ -11,6 +11,25 @@ The app is implemented and verified with local fallbacks plus Supabase anon inta
 - Re-test Ava with `/api/health` showing `geminiConfigured: true`.
 - Without `GEMINI_API_KEY`, Ava uses the deterministic compliance-safe fallback.
 
+### Voice (xAI Realtime Voice Agent)
+
+Ava can offer a live voice mode powered by xAI's Realtime Voice Agent API,
+alongside the existing Gemini text chat.
+
+- Build/configure the voice agent in the xAI dashboard (instructions, voice,
+  and turn detection live there) and copy its `agent_id`.
+- Set `XAI_API_KEY` (server secret — used only to mint short-lived client
+  tokens; never sent to the browser) and `XAI_VOICE_AGENT_ID` in Vercel.
+- Re-test with `/api/health` showing `xaiVoiceConfigured: true`.
+- The browser never sees `XAI_API_KEY`: `/api/ava/voice/token` mints a
+  5-minute ephemeral client secret server-side, and the mic button in the
+  Ava chat widget uses that token to open the realtime WebSocket directly.
+- Requires HTTPS (or localhost) and a user gesture (the mic button click) to
+  request microphone access.
+- If the token exchange or the realtime WebSocket protocol changes on xAI's
+  side, the relevant code is `lib/voice/xai.ts` (token minting) and
+  `components/useAvaVoice.ts` (browser WebSocket + audio).
+
 ### Supabase Admin
 
 - Get the Supabase service role key from the project settings for project `bukuxdudjwotgbjtzasy`.

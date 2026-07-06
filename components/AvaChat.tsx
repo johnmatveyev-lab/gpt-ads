@@ -1,8 +1,10 @@
 "use client";
 
-import { MessageCircle, Send, X } from "lucide-react";
+import { Mic, MicOff, MessageCircle, Phone, Send, X } from "lucide-react";
 import { useState } from "react";
 import type { AgentMessage } from "@/lib/types";
+import { useAvaVoice } from "@/components/useAvaVoice";
+import { formatPhoneDisplay } from "@/lib/phone";
 
 const starter: AgentMessage = {
   role: "assistant",
@@ -10,11 +12,28 @@ const starter: AgentMessage = {
     "Hi, I’m Ava. Tell me what kind of local business you run and where you serve customers. I’ll help you think through ChatGPT Ads readiness without making fake partner or guaranteed-results claims.",
 };
 
-export default function AvaChat({ bookingUrl }: { bookingUrl: string }) {
+export default function AvaChat({ bookingUrl, phoneNumber }: { bookingUrl: string; phoneNumber?: string }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<AgentMessage[]>([starter]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const voice = useAvaVoice();
+  const voiceActive = voice.status !== "idle" && voice.status !== "error";
+
+  function toggleVoice() {
+    if (voiceActive) {
+      voice.stop();
+    } else {
+      voice.start();
+    }
+  }
+
+  const voiceStatusLabel: Record<string, string> = {
+    connecting: "Connecting…",
+    listening: "Listening…",
+    speaking: "Ava is speaking…",
+    error: "Voice unavailable",
+  };
 
   async function sendMessage(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,10 +79,28 @@ export default function AvaChat({ bookingUrl }: { bookingUrl: string }) {
               <strong>Talk with Ava</strong>
               <p>Your AI Growth Consultant</p>
             </div>
-            <button type="button" onClick={() => setOpen(false)} aria-label="Close Ava chat">
-              <X size={22} />
-            </button>
+            <div className="chatHeaderActions">
+              <button
+                type="button"
+                className={`voiceToggle ${voiceActive ? "voiceToggleActive" : ""}`}
+                onClick={toggleVoice}
+                aria-pressed={voiceActive}
+                aria-label={voiceActive ? "Stop talking with Ava" : "Talk with Ava using voice"}
+                title={voiceActive ? "Stop voice" : "Talk to Ava"}
+              >
+                {voiceActive ? <MicOff size={18} /> : <Mic size={18} />}
+              </button>
+              <button type="button" onClick={() => setOpen(false)} aria-label="Close Ava chat">
+                <X size={22} />
+              </button>
+            </div>
           </header>
+          {voiceActive || voice.error ? (
+            <div className="voicePanel" role="status">
+              <span>{voice.error ? voice.error : voiceStatusLabel[voice.status] || "Voice"}</span>
+              {voice.liveTranscript ? <p>{voice.liveTranscript}</p> : null}
+            </div>
+          ) : null}
           <div className="chatMessages">
             {messages.map((message, index) => (
               <div className={`message ${message.role}`} key={`${message.role}-${index}`}>
@@ -74,6 +111,11 @@ export default function AvaChat({ bookingUrl }: { bookingUrl: string }) {
             <a className="bookingLink" href={bookingUrl} target="_blank" rel="noreferrer">
               Prefer a human call? Book a time that works for you.
             </a>
+            {phoneNumber ? (
+              <a className="bookingLink" href={`tel:${phoneNumber}`}>
+                <Phone size={14} /> Or call Ava now: {formatPhoneDisplay(phoneNumber)}
+              </a>
+            ) : null}
           </div>
           <form className="chatComposer" onSubmit={sendMessage}>
             <input
