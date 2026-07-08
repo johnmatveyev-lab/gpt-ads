@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import AvaChat from "@/components/AvaChat";
 import LeadAuditForm from "@/components/LeadAuditForm";
+import TalkWithAvaButton from "@/components/TalkWithAvaButton";
 import { formatPhoneDisplay } from "@/lib/phone";
 
 const bookingUrl = process.env.BOOKING_URL || "https://cal.com";
@@ -118,9 +119,7 @@ export default function Home() {
                 Get My Readiness Audit
                 <ArrowRight size={22} />
               </a>
-              <a className="secondaryButton" href="#ava">
-                Talk with Ava
-              </a>
+              <TalkWithAvaButton />
               <a className="secondaryButton" href={`tel:${avaPhoneNumber}`}>
                 <Phone size={18} />
                 Call Ava: {avaPhoneDisplay}

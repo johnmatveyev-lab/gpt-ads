@@ -1,9 +1,9 @@
 "use client";
 
-import { Mic, MicOff, MessageCircle, Phone, Send, X } from "lucide-react";
+import { Mic, MessageCircle, Phone, Send, X } from "lucide-react";
 import { useState } from "react";
 import type { AgentMessage } from "@/lib/types";
-import { useAvaVoice } from "@/components/useAvaVoice";
+import { useAvaOrb } from "@/components/AvaVoiceOrbProvider";
 import { formatPhoneDisplay } from "@/lib/phone";
 
 const starter: AgentMessage = {
@@ -17,23 +17,7 @@ export default function AvaChat({ bookingUrl, phoneNumber }: { bookingUrl: strin
   const [messages, setMessages] = useState<AgentMessage[]>([starter]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const voice = useAvaVoice();
-  const voiceActive = voice.status !== "idle" && voice.status !== "error";
-
-  function toggleVoice() {
-    if (voiceActive) {
-      voice.stop();
-    } else {
-      voice.start();
-    }
-  }
-
-  const voiceStatusLabel: Record<string, string> = {
-    connecting: "Connecting…",
-    listening: "Listening…",
-    speaking: "Ava is speaking…",
-    error: "Voice unavailable",
-  };
+  const { openOrb } = useAvaOrb();
 
   async function sendMessage(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,25 +66,18 @@ export default function AvaChat({ bookingUrl, phoneNumber }: { bookingUrl: strin
             <div className="chatHeaderActions">
               <button
                 type="button"
-                className={`voiceToggle ${voiceActive ? "voiceToggleActive" : ""}`}
-                onClick={toggleVoice}
-                aria-pressed={voiceActive}
-                aria-label={voiceActive ? "Stop talking with Ava" : "Talk with Ava using voice"}
-                title={voiceActive ? "Stop voice" : "Talk to Ava"}
+                className="voiceToggle"
+                onClick={openOrb}
+                aria-label="Talk with Ava using voice"
+                title="Talk to Ava"
               >
-                {voiceActive ? <MicOff size={18} /> : <Mic size={18} />}
+                <Mic size={18} />
               </button>
               <button type="button" onClick={() => setOpen(false)} aria-label="Close Ava chat">
                 <X size={22} />
               </button>
             </div>
           </header>
-          {voiceActive || voice.error ? (
-            <div className="voicePanel" role="status">
-              <span>{voice.error ? voice.error : voiceStatusLabel[voice.status] || "Voice"}</span>
-              {voice.liveTranscript ? <p>{voice.liveTranscript}</p> : null}
-            </div>
-          ) : null}
           <div className="chatMessages">
             {messages.map((message, index) => (
               <div className={`message ${message.role}`} key={`${message.role}-${index}`}>

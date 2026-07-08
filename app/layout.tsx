@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import AvaVoiceOrbProvider from "@/components/AvaVoiceOrbProvider";
 import OpenAIAdsPixel from "@/components/OpenAIAdsPixel";
 import "./globals.css";
 
@@ -15,7 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <OpenAIAdsPixel />
         <AnalyticsTracker />
-        {children}
+        <AvaVoiceOrbProvider>{children}</AvaVoiceOrbProvider>
       </body>
     </html>
   );
